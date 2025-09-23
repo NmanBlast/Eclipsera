@@ -2,58 +2,72 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notas - Tablero Simple</title>
+  <title>Notas - Tablero</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #fff;
-      color: #333;
+      background: linear-gradient(135deg, #1a001f, #2a0033, #3d0052, #1f0029);
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      color: #f0eaff;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #e2c9ff;
     }
     .board {
       display: flex;
-      gap: 20px;
+      justify-content: space-around;
       padding: 20px;
-      overflow-x: auto;
+      gap: 20px;
     }
     .column {
-      flex: 0 0 300px;
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
+      background: rgba(40, 0, 55, 0.8);
+      border-radius: 10px;
+      padding: 15px;
+      width: 250px;
+      min-height: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
     .column h2 {
-      margin: 0 0 10px 0;
-      font-size: 18px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
+      text-align: center;
+      color: #d8b4ff;
+      margin-bottom: 10px;
     }
     .card {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      background: rgba(100, 0, 140, 0.7);
+      border-radius: 8px;
       padding: 10px;
-      margin-bottom: 10px;
-      font-size: 14px;
+      margin: 10px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      cursor: default;
+      color: #f0eaff;
     }
   </style>
 </head>
 <body>
+  <header>📋 Mis Notas</header>
+
   <div class="board">
     <div class="column">
-      <h2>Pendiente</h2>
-      <div class="card">Ejemplo de nota pendiente</div>
-      <div class="card">Otra nota aquí</div>
+      <h2>Pendientes</h2>
+      <div class="card">Configurar el spawn del Survival</div>
+      <div class="card">Revisar rangos en LuckPerms</div>
     </div>
+
     <div class="column">
-      <h2>En progreso</h2>
-      <div class="card">Ejemplo en progreso</div>
+      <h2>En Progreso</h2>
+      <div class="card">Traducir nombres de ítems de pesca</div>
     </div>
+
     <div class="column">
       <h2>Completado</h2>
-      <div class="card">Ejemplo completado</div>
+      <div class="card">Añadido sistema de pesca con minijuego</div>
+      <div class="card">Instalado plugin de economía</div>
     </div>
   </div>
 </body>
