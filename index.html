@@ -1,207 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Notas — Tablero simple</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas - Tablero Simple</title>
   <style>
-    :root{
-      --bg:#ffffff;
-      --muted:#7a7a7a;
-      --card:#fbfbfb;
-      --accent:#0b74de;
-      --shadow:0 6px 18px rgba(11,116,222,0.08);
-      --radius:10px;
-      --gap:16px;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #333;
     }
-    html,body{height:100%;}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:#111;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+    .board {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      overflow-x: auto;
     }
-    header{
-      display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #eee;
-      background:linear-gradient(180deg, rgba(255,255,255,1), rgba(250,250,250,1));
-      position:sticky;top:0;z-index:20;
+    .column {
+      flex: 0 0 300px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
     }
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,#fff,#f6f6f6);display:flex;align-items:center;justify-content:center;border:1px solid #eee;font-weight:700;color:var(--accent)}
-    h1{font-size:16px;margin:0}
-    .controls{display:flex;gap:8px}
-    button{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;box-shadow:var(--shadow);font-weight:600}
-    button.ghost{background:transparent;color:var(--accent);border:1px solid #e6e6e6;box-shadow:none}
-    main{padding:18px;min-height:calc(100vh - 70px)}
-    .board{display:flex;gap:var(--gap);align-items:flex-start;overflow:auto;padding-bottom:32px}
-    .column{background:linear-gradient(180deg,#fff,#fcfcfc);border:1px solid #eee;border-radius:var(--radius);min-width:280px;padding:12px;box-shadow:var(--shadow);flex:0 0 300px}
-    .col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .col-title{font-weight:700}
-    .col-actions{display:flex;gap:6px}
-    .cards{display:flex;flex-direction:column;gap:10px;min-height:20px}
-    .card{background:var(--card);padding:10px;border-radius:8px;border:1px solid #eee;cursor:grab}
-    .card[contenteditable]{outline:2px dashed rgba(11,116,222,0.14)}
-    .small{font-size:13px;color:var(--muted)}
-    .muted{color:var(--muted)}
-    footer{padding:18px;border-top:1px solid #eee;text-align:center;color:var(--muted);font-size:13px}
-    .add{display:flex;gap:8px;align-items:center}
-    input[type=text]{padding:8px;border-radius:8px;border:1px solid #eee;background:#fff}
-    /* modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center}
-    .modal.open{display:flex}
-    .modal .panel{width:720px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
-    .row{display:flex;gap:8px;align-items:center}
-    .export-area{width:100%;height:220px;font-family:monospace;padding:8px;border-radius:8px;border:1px solid #eee}
-    /* responsive */
-    @media (max-width:860px){.board{padding:6px}.column{min-width:240px;flex-basis:240px}}
+    .column h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo">N</div>
-      <div>
-        <h1>Eclipsera — Notas</h1>
-        <div class="small muted">Tablero simple para guardar ideas y actualizar info</div>
-      </div>
+  <div class="board">
+    <div class="column">
+      <h2>Pendiente</h2>
+      <div class="card">Ejemplo de nota pendiente</div>
+      <div class="card">Otra nota aquí</div>
     </div>
-    <div class="controls">
-      <button id="addColumn">Nueva columna</button>
-      <button id="openExport" class="ghost">Export / Import</button>
-      <button id="reset" class="ghost">Reset</button>
+    <div class="column">
+      <h2>En progreso</h2>
+      <div class="card">Ejemplo en progreso</div>
     </div>
-  </header>
-  <main>
-    <div id="board" class="board" aria-live="polite"></div>
-  </main>
-  <footer>
-    Los cambios se guardan automáticamente en tu navegador. Edita pulsando dos veces sobre una tarjeta o usa "Editar HTML" para editar su contenido raw.
-  </footer>
-
-  <div id="modal" class="modal" role="dialog" aria-hidden="true">
-    <div class="panel">
-      <h3>Exportar / Importar tablero</h3>
-      <p class="small muted">Copia el JSON para guardar o pega un JSON válido para restaurar.</p>
-      <textarea id="exportArea" class="export-area"></textarea>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
-        <button id="importBtn">Importar</button>
-        <button id="closeModal" class="ghost">Cerrar</button>
-      </div>
+    <div class="column">
+      <h2>Completado</h2>
+      <div class="card">Ejemplo completado</div>
     </div>
   </div>
-
-  <script>
-    // Simple kanban-like board: columns with cards. All data stored on localStorage under 'eclipsera-board'.
-    // Features:
-    // - Add/remove columns
-    // - Add/remove cards
-    // - Double click a card to edit (contentEditable)
-    // - Right-click card -> Edit HTML (raw innerHTML)
-    // - Drag & drop cards between columns
-    // - Export / Import JSON
-
-    const STORAGE_KEY = 'eclipsera-board-v1';
-    const boardEl = document.getElementById('board');
-    const modal = document.getElementById('modal');
-    const exportArea = document.getElementById('exportArea');
-
-    // Starter demo data if empty
-    const starter = [
-      {id:'col-ideas', title:'Ideas', cards:[{id:uid(), html:'<strong>Idea:</strong> Sistema de pesca'},{id:uid(), html:'<em>Evento:</em> Lluvia ácida (weekend)'}]},
-      {id:'col-backlog', title:'Backlog', cards:[]},
-      {id:'col-todo', title:'To do', cards:[]}
-    ];
-
-    function uid(){return 'id-'+Math.random().toString(36).slice(2,9)}
-
-    function save(data){localStorage.setItem(STORAGE_KEY, JSON.stringify(data));}
-    function load(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||starter}catch(e){return starter}}
-
-    // Render
-    function render(){
-      const data = load(); boardEl.innerHTML='';
-      data.forEach(col=>{
-        const colEl = document.createElement('section'); colEl.className='column'; colEl.dataset.colId=col.id;
-        colEl.innerHTML = `
-          <div class="col-header">
-            <div class="col-title" contenteditable="true" data-title>`+escapeHtml(col.title)+`</div>
-            <div class="col-actions">
-              <button data-addcard class="ghost">+</button>
-              <button data-delcol class="ghost">✕</button>
-            </div>
-          </div>
-          <div class="cards" data-cards></div>
-        `;
-        const cardsEl = colEl.querySelector('[data-cards]');
-        col.cards.forEach(card=>{
-          const c = document.createElement('div'); c.className='card'; c.draggable=true; c.dataset.cardId=card.id; c.innerHTML = card.html;
-          // double click to toggle contentEditable
-          c.addEventListener('dblclick', e=>{
-            c.contentEditable = 'true'; c.focus();
-          });
-          // blur saves
-          c.addEventListener('blur', e=>{ if(c.isContentEditable){c.contentEditable='false'; updateCard(col.id, card.id, c.innerHTML)} }, true);
-          // context menu for Edit HTML
-          c.addEventListener('contextmenu', e=>{
-            e.preventDefault(); const raw = prompt('Editar HTML de la tarjeta:', card.html); if(raw!==null){c.innerHTML = raw; updateCard(col.id, card.id, raw)}
-          });
-
-          // drag handlers
-          c.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', card.id); e.dataTransfer.effectAllowed='move'; c.style.opacity='0.5'});
-          c.addEventListener('dragend', e=>{ c.style.opacity='1'});
-
-          cardsEl.appendChild(c);
-        });
-
-        // events for column
-        colEl.querySelector('[data-addcard]').addEventListener('click', ()=>{ addCard(col.id, '<em>Tarea nueva</em>')});
-        colEl.querySelector('[data-delcol]').addEventListener('click', ()=>{ if(confirm('Eliminar columna?')){ deleteColumn(col.id)}});
-
-        // allow drop
-        colEl.querySelector('.cards').addEventListener('dragover', e=>{ e.preventDefault(); e.dataTransfer.dropEffect='move'});
-        colEl.querySelector('.cards').addEventListener('drop', e=>{
-          e.preventDefault(); const cardId = e.dataTransfer.getData('text/plain'); moveCard(cardId, col.id, null);
-        });
-
-        // title edit
-        colEl.querySelector('[data-title]').addEventListener('blur', e=>{ const newTitle = e.target.innerText.trim()||'Sin título'; updateColumnTitle(col.id, newTitle)});
-
-        boardEl.appendChild(colEl);
-      });
-    }
-
-    function addColumn(title){ const data = load(); data.push({id:uid(), title:title||'Columna', cards:[]}); save(data); render(); }
-    function deleteColumn(colId){ let data = load(); data = data.filter(c=>c.id!==colId); save(data); render(); }
-    function addCard(colId, html){ const data = load(); const col = data.find(c=>c.id===colId); if(!col) return; col.cards.unshift({id:uid(), html}); save(data); render(); }
-    function updateCard(colId, cardId, html){ const data = load(); const col = data.find(c=>c.id===colId); if(!col) return; const card = col.cards.find(x=>x.id===cardId); if(card){card.html=html; save(data)} }
-    function updateColumnTitle(colId, title){ const data = load(); const col = data.find(c=>c.id===colId); if(col){col.title=title; save(data)} }
-
-    function moveCard(cardId, toColId, index){ const data = load(); let fromCol=null, cardObj=null; data.forEach(c=>{ const i = c.cards.findIndex(x=>x.id===cardId); if(i>-1){fromCol=c; cardObj=c.cards.splice(i,1)[0];}}); const toCol = data.find(c=>c.id===toColId); if(!toCol) return; if(index===null){ toCol.cards.unshift(cardObj)} else { toCol.cards.splice(index,0,cardObj)} save(data); render(); }
-
-    // export/import
-    document.getElementById('openExport').addEventListener('click', ()=>{ exportArea.value = JSON.stringify(load(), null, 2); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); });
-    document.getElementById('closeModal').addEventListener('click', ()=>{ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); });
-    document.getElementById('importBtn').addEventListener('click', ()=>{
-      try{ const parsed = JSON.parse(exportArea.value); if(!Array.isArray(parsed)) throw new Error('Formato inválido'); save(parsed); render(); modal.classList.remove('open'); alert('Importado correctamente'); }
-      catch(err){ alert('JSON inválido: '+err.message)}
-    });
-
-    // reset
-    document.getElementById('reset').addEventListener('click', ()=>{ if(confirm('Borrar todo y restaurar demo?')){ localStorage.removeItem(STORAGE_KEY); render(); }});
-
-    // new column
-    document.getElementById('addColumn').addEventListener('click', ()=>{ const t = prompt('Nombre de la columna:','Nueva columna'); if(t) addColumn(t)});
-
-    // initial render
-    render();
-
-    // keyboard shortcuts: Ctrl+E export
-    document.addEventListener('keydown', e=>{ if(e.ctrlKey && e.key.toLowerCase()==='e'){ e.preventDefault(); document.getElementById('openExport').click(); }});
-
-    // helper
-    function escapeHtml(s){ return String(s).replace(/[&<>]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-  </script>
 </body>
 </html>
