@@ -17,6 +17,8 @@
       padding: 0;
       color: #f0eaff;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     header {
       text-align: center;
@@ -25,11 +27,17 @@
       font-weight: bold;
       color: #e2c9ff;
     }
+    .powr-hit-counter {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
     .board {
       display: flex;
       justify-content: center;
       padding: 20px;
       gap: 10px; /* más pegados */
+      flex: 1;
     }
     .column {
       background: rgba(40, 0, 55, 0.85);
@@ -55,10 +63,21 @@
       color: #f0eaff;
       font-size: 1.05em;
     }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9em;
+      color: #cbb3ff;
+      background: rgba(30, 0, 45, 0.8);
+    }
   </style>
 </head>
 <body>
   <header>👾​ Progreso de Eclipsera</header>
+
+  <!-- Contador de visitas POWR -->
+  <div class="powr-hit-counter" id="cfbe4f3b_1758673875"></div>
+  <script src="https://www.powr.io/powr.js?platform=html"></script>
 
   <div class="board">
     <div class="column">
@@ -88,5 +107,7 @@
       <div class="card">Instalado plugin de economía</div>
     </div>
   </div>
+
+  <footer>Copyright © Eclipsera 2025</footer>
 </body>
 </html>
